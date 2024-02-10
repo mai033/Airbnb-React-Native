@@ -14,6 +14,7 @@ import { Link } from 'expo-router';
 import Colors from '@/constants/Colors';
 import * as Haptics from 'expo-haptics';
 
+
 const categories = [
   {
     name: 'Homes',
@@ -45,7 +46,11 @@ const categories = [
   },
 ];
 
-const ExploreHeader = () => {
+interface Props {
+  onCategoryChanged: (category: string) => void;
+}
+
+const ExploreHeader = ({ onCategoryChanged }: Props ) => {
   const scrollRef = useRef<ScrollView>(null);
   const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
   const [activeIndex, setActiveIndex] = React.useState(0);
@@ -53,12 +58,11 @@ const ExploreHeader = () => {
   const selectCategory = (index: number) => {
     const selected = itemsRef.current[index];
     setActiveIndex(index);
-
     selected?.measure((x) => {
-      scrollRef.current?.scrollTo({ x: x, y: 0, animated: true });
+      scrollRef.current?.scrollTo({ x: x - 16, y: 0, animated: true });
     });
-
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onCategoryChanged(categories[index].name);
   };
 
   return (
@@ -87,7 +91,7 @@ const ExploreHeader = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           alignItems: 'center',
-          gap: 20,
+          gap: 30,
           paddingHorizontal: 16,
         }}
       >
